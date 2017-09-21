@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/RayedB/mean-boilerplate#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "express": "^4.15.4",
     "http": "0.0.0",
+    "jsonwebtoken": "^8.0.1",
     "mongoose": "^4.11.12",
     "passport": "^0.4.0"
   }
