@@ -31,7 +31,9 @@ app.use(express.static(__dirname + '/public'));
 * Routing
 */
 
-
+app.get('/protected', function(req,res){
+  res.
+})
 
 //-- catch all route to initialize client app --
 app.get('*', function(req, res) {
