@@ -4,14 +4,15 @@ var mongoose   = require('mongoose');
 var http       = require('http').Server(app);
 var mongodbUri = require('./config/dbconnect');
 var jwt        = require('jsonwebtoken');
-var path       = require('path'); 
+var path       = require('path');
+var bodyParser = require('body-parser')
 
 var User       = require('./models/userModel');
 var userCtrl   = require('./controllers/userController');
 var testCtrl   = require('./controllers/testController');
 
-var multer = require('multer');
-var upload = multer({ dest: 'uploads/' })
+var multer     = require('multer');
+var upload     = multer({ dest: 'uploads/' })
 
 /*
 * Connection to DB
@@ -32,6 +33,8 @@ conn.once('open', function() {
 /*
 * Accessing Public folder and setting routes
 */
+app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.json())
 app.use(express.static(__dirname + '/public'));
 
 
@@ -51,6 +54,15 @@ app.use(express.static(__dirname + '/public'));
 //     next();
 //   }
 // })
+app.get("/register", function(req,res){
+  res.sendFile('register.html', { root: path.join(__dirname, './public') })
+})
+app.post("/register", function(req,res){
+  if (req.body.password == req.body.password_confirmation){
+    console.log(req.body.email)
+  } else { console.log("nah");}
+
+  })
 
 app.post('/post', upload.single('file'), function(req,res,next){
   console.log(req)
