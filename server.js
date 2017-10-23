@@ -1,8 +1,17 @@
-var express  = require('express');
-var app      = express();
-var mongoose = require('mongoose');
-var http     = require('http').Server(app);
+var express    = require('express');
+var app        = express();
+var mongoose   = require('mongoose');
+var http       = require('http').Server(app);
 var mongodbUri = require('./config/dbconnect');
+var jwt        = require('jsonwebtoken');
+var path       = require('path'); 
+
+var User       = require('./models/userModel');
+var userCtrl   = require('./controllers/userController');
+var testCtrl   = require('./controllers/testController');
+
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' })
 
 /*
 * Connection to DB
@@ -10,7 +19,6 @@ var mongodbUri = require('./config/dbconnect');
 */
 var options = { server: { socketOptions: { keepAlive: 900000, connectTimeoutMS: 90000 } },
                 replset: { socketOptions: { keepAlive: 900000, connectTimeoutMS : 90000 } } };
-
 
 mongoose.connect(mongodbUri);
 var conn = mongoose.connection;
@@ -31,9 +39,25 @@ app.use(express.static(__dirname + '/public'));
 * Routing
 */
 
-app.get('/protected', function(req,res){
-  res.
+// app.use(function(req,res,next){
+//   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+//     jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function(err,decode){
+//       if (err) req.user = undefined;
+//       req.user = decode;
+//       next();
+//     });
+//   } else {
+//     req.user = undefined;
+//     next();
+//   }
+// })
+
+app.post('/post', upload.single('file'), function(req,res,next){
+  console.log(req)
 })
+
+app.route('/protected')
+   .get(userCtrl.loginRequired,testCtrl.test_func)
 
 //-- catch all route to initialize client app --
 app.get('*', function(req, res) {
